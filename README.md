@@ -1,0 +1,1 @@
+# galamsey-watch-ghana
