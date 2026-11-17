@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en-GH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172d25">
+  <meta name="description" content="A citizen-science pilot for documenting landscape changes that may be linked to galamsey in Ghana.">
+  <title>Galamsey Watch Ghana | Community observations</title>
+  <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./vendor/leaflet.css">
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./vendor/leaflet.js"></script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a href="#main" class="skip">Skip to content</a>
+  <header class="header">
+    <div class="shell navigation">
+      <a class="brand" href="./" aria-label="Galamsey Watch Ghana home">
+        <img src="./assets/mark.svg" width="37" height="37" alt="">
+        <span>Galamsey Watch <small>GHANA</small></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a class="current" href="#explore">Explore map</a>
+        <a href="#about">About</a>
+        <button class="nav-button" id="open-outbox" type="button">Outbox <span id="outbox-count">0</span></button>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="shell">
+    <section class="intro" aria-labelledby="title">
+      <div>
+        <p class="eyebrow"><span class="ghana-colors" aria-hidden="true"></span> A citizen science pilot</p>
+        <h1 id="title">Galamsey Watch Ghana</h1>
+        <p class="lead">Explore how communities could document changes to rivers, forests, and land that may be linked to galamsey, Ghana’s illegal small-scale mining.</p>
+      </div>
+      <button type="button" id="open-report" class="primary"><span aria-hidden="true">＋</span> Try a report</button>
+    </section>
+    <section class="workspace" id="explore" aria-label="Explore the Ghana map">
+      <div class="map-card">
+        <div class="map-top">
+          <h2>Explore Ghana</h2>
+          <div class="layers" role="group" aria-label="Map layers">
+            <button type="button" aria-pressed="true" data-layer="regions">Regions</button>
+            <button type="button" aria-pressed="true" data-layer="water">Waterways</button>
+            <button type="button" aria-pressed="true" data-layer="observations">Examples</button>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <div id="ghana-map" class="main-map" aria-label="Interactive map of Ghana with example observations" role="region"></div>
+          <div class="map-action">
+            <button id="reset-map" aria-label="Reset map to Ghana" title="Reset map to Ghana" type="button">⌖ <span>Ghana</span></button>
+          </div>
+          <div class="north" aria-hidden="true">▲<br>N</div>
+          <p id="map-status" class="map-status" role="status" hidden></p>
+        </div>
+        <div class="map-footer">
+          <span><i class="legend-line region-key"></i> Region boundary</span>
+          <span><i class="legend-line"></i> River or lake</span>
+          <span><i class="legend-dot"></i> Example observation</span>
+        </div>
+      </div>
+      <aside class="reports" aria-labelledby="reports-title">
+        <div class="report-head">
+          <p class="eyebrow sample-label"><span aria-hidden="true"></span> Fictional data</p>
+          <h2 id="reports-title">Example observations</h2>
+          <p>Select an example to see it on the map. These locations illustrate the workflow.</p>
+          <label class="sr-only" for="filter">Filter example observations</label>
+          <select id="filter" disabled><option value="all">All observation types</option></select>
+        </div>
+        <div id="example-list" class="example-list" aria-live="polite">
+          <p class="empty">Loading example observations…</p>
+        </div>
+      </aside>
+    </section>
+    <section class="about" id="about" aria-labelledby="about-title">
+      <div>
+        <p class="eyebrow">About the pilot</p>
+        <h2 id="about-title">From an observation to a map</h2>
+        <p>Analem Jacob started this project after exploring Project Squirrel in the Citizen Sciences in Landscape Ecology lab at UBC Forestry (MGEM). This trial explores how community observations could help identify areas for further review.</p>
+      </div>
+      <div>
+        <h3>How the trial works</h3>
+        <p>Open the site once online and wait for the offline indicator. Then use a fictional location and test what happens when you save an observation with no signal. Saved examples stay in your outbox. You can export them or sync them in the local database trial.</p>
+        <p class="source-links"><a href="https://scistarter.org/form/project-squirrel#map">Project Squirrel ↗</a> <a href="https://forestlink.org/alerts-map/">ForestLink ↗</a> <a href="./data/SOURCES.txt">Map &amp; project sources ↗</a></p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="shell"><span>Galamsey Watch Ghana · Pilot by Analem Jacob</span><span id="offline-status" role="status">Preparing offline access…</span></div>
+  </footer>
+
+  <dialog id="report-dialog" aria-labelledby="report-title">
+    <form id="report-form">
+      <div class="dialog-header">
+        <div><p class="eyebrow">Fictional data only</p><h2 id="report-title">Try a report</h2></div>
+        <button type="button" class="close" data-close="report-dialog" aria-label="Close report">×</button>
+      </div>
+      <p class="dialog-help">Use a made-up observation. Saved examples stay in your outbox and never appear on the public map.</p>
+      <div class="form-row">
+        <label><span id="category-label">Observation type</span><select aria-labelledby="category-label" id="category" name="category" required><option value="">Choose an observation type</option></select></label>
+        <label>Observation date<input type="date" id="date" name="date" required></label>
+      </div>
+      <fieldset>
+        <legend>Example location</legend>
+        <p class="field-help">Place a pin within Ghana or enter latitude and longitude below.</p>
+        <div id="report-map" class="report-map" role="region" aria-label="Map for choosing a fictional report location"></div>
+        <div class="form-row">
+          <label>Latitude<input id="lat" name="lat" inputmode="decimal" type="number" step="any" min="4.5" max="11.3" required></label>
+          <label>Longitude<input id="lng" name="lng" inputmode="decimal" type="number" step="any" min="-3.5" max="1.3" required></label>
+        </div>
+      </fieldset>
+      <label for="notes">What did you see?</label>
+      <textarea id="notes" name="notes" maxlength="350" rows="3" placeholder="Example: The water looked cloudy downstream of a bare patch of land." required></textarea>
+      <div class="dialog-actions">
+        <p id="report-status" role="status"></p>
+        <button type="submit" class="primary" id="save-report">Save example</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="outbox-dialog" aria-labelledby="outbox-title">
+    <div class="dialog-header">
+      <div><p class="eyebrow">Your device</p><h2 id="outbox-title">Report outbox</h2></div>
+      <button type="button" class="close" data-close="outbox-dialog" aria-label="Close outbox">×</button>
+    </div>
+    <p id="outbox-mode" class="dialog-help"></p>
+    <ul id="outbox-list" class="outbox-list"></ul>
+    <div class="outbox-actions">
+      <button id="export-reports" type="button" class="secondary">Export GeoJSON</button>
+      <button id="sync-reports" type="button" class="primary" hidden>Sync queued examples</button>
+    </div>
+    <p id="sync-status" role="status"></p>
+  </dialog>
+</body>
+</html>

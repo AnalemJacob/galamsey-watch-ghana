@@ -1,0 +1,4 @@
+server/.private/
+node_modules/
+
+.openai/

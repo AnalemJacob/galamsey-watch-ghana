@@ -1,0 +1,45 @@
+GALAMSEY WATCH GHANA — MAP AND PROJECT SOURCES
+
+Regions
+geoBoundaries gbOpen GHA ADM1, boundaryID GHA-ADM1-69750345.
+Represents 2021. Original data credited to OpenStreetMap contributors.
+Source: https://www.geoboundaries.org/api/current/gbOpen/GHA/ADM1/
+Pinned input: https://media.githubusercontent.com/media/wmgeolab/geoBoundaries/9469f09/releaseData/gbOpen/GHA/ADM1/geoBoundaries-GHA-ADM1_simplified.geojson
+Adaptations: retained region names, rounded coordinates to 5 decimals,
+and dissolved the regions for the Ghana outline in neighbors.geojson.
+License recorded by geoBoundaries: Creative Commons Attribution-ShareAlike 2.0.
+https://creativecommons.org/licenses/by-sa/2.0/
+
+Context
+Natural Earth Vector v5.1.2: 1:50m administrative boundaries of neighboring
+countries, 1:10m rivers and lake centerlines, lakes, and populated places.
+Selected, clipped, or reduced to cartographic attributes for this pilot.
+https://github.com/nvkelso/natural-earth-vector/tree/v5.1.2/geojson
+Public domain: https://www.naturalearthdata.com/about/terms-of-use/
+Reference labels are placed for readability. Map boundaries and hydrography
+are generalized and intended for orientation.
+
+Southern river references
+© OpenStreetMap contributors via the Geofabrik Ghana free shapefile extract.
+Includes named mapped segments of the Ankobra, Birim, Offin (Ofin), Pra and
+Tano rivers. Selected river names, simplified geometry, and retained OSM IDs.
+The layer shows reference segments and does not represent watershed coverage.
+https://download.geofabrik.de/africa/ghana.html
+License: ODbL 1.0 — https://opendatacommons.org/licenses/odbl/1-0/
+Attribution: https://www.openstreetmap.org/copyright
+
+Example observations
+All five example locations and descriptions are fictional. The examples
+are not evidence, a risk assessment, or a record of any actual activity.
+
+Project references
+Project Squirrel (SciStarter): map and volunteer contribution flow
+https://scistarter.org/form/project-squirrel#map
+ForestLink (Rainforest Foundation UK): community monitoring and alert review
+https://forestlink.org/alerts-map/
+Forest Watcher (Global Forest Watch): offline report queue
+https://content.globalforestwatch.org/wp-content/uploads/2020/09/GFW-User-Guide-English.pdf
+
+Software and typography
+Leaflet 1.9.4, BSD 2-Clause, see ../vendor/LICENSE.
+Bricolage Grotesque and Instrument Sans, SIL Open Font License 1.1, see ../assets/.

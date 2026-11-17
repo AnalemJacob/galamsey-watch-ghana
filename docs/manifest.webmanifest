@@ -1,0 +1,10 @@
+{
+  "name": "Galamsey Watch Ghana",
+  "short_name": "Galamsey Watch",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#172d25",
+  "background_color": "#f7f5ee",
+  "icons": [{ "src": "./assets/mark.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

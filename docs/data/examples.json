@@ -1,0 +1,42 @@
+[
+  {
+    "id": "example-1",
+    "category": "water",
+    "region": "Western North",
+    "lat": 6.25,
+    "lng": -2.55,
+    "notes": "Example of a report about unusually cloudy water. Water colour can have several causes and would need follow-up."
+  },
+  {
+    "id": "example-2",
+    "category": "land",
+    "region": "Ashanti",
+    "lat": 6.57,
+    "lng": -1.76,
+    "notes": "Example of a report about recently exposed soil and a patch of disturbed ground."
+  },
+  {
+    "id": "example-3",
+    "category": "vegetation",
+    "region": "Eastern",
+    "lat": 6.45,
+    "lng": -0.48,
+    "notes": "Example of a report about a break in vegetation cover beside a stream."
+  },
+  {
+    "id": "example-4",
+    "category": "land",
+    "region": "Western",
+    "lat": 5.34,
+    "lng": -2.18,
+    "notes": "Example of a report about standing water in a patch of freshly disturbed land."
+  },
+  {
+    "id": "example-5",
+    "category": "water",
+    "region": "Central",
+    "lat": 5.82,
+    "lng": -1.24,
+    "notes": "Example of a report about a visible colour change along a waterway."
+  }
+]
