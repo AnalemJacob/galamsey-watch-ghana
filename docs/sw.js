@@ -1,5 +1,5 @@
 const prefix = "galamsey-watch:" + self.registration.scope + ":";
-const cacheName = prefix + "v3";
+const cacheName = prefix + "v5";
 const files = [
   "./index.html", "./style.css", "./app.js", "./model.js", "./maps.js", "./storage.js",
   "./manifest.webmanifest", "./assets/mark.svg", "./assets/bricolage.woff2", "./assets/instrument.woff2",
@@ -10,7 +10,7 @@ const files = [
 ];
 
 self.addEventListener("install", event => {
-  event.waitUntil(caches.open(cacheName).then(cache => cache.addAll(files)).then(() => self.skipWaiting()));
+  event.waitUntil(caches.open(cacheName).then(cache => cache.addAll(files.map(url => new Request(url, { cache: "reload" })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", event => {

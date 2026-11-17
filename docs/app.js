@@ -1,5 +1,5 @@
 import { types, regionAt, validateDraft } from "./model.js";
-import { buildExplorer, buildPicker } from "./maps.js";
+import { buildExplorer, buildPicker, regionName } from "./maps.js";
 import { readExamples, saveExample, removeExample } from "./storage.js";
 
 const byId = id => document.getElementById(id);
@@ -15,6 +15,8 @@ const exportButton = byId("export-reports");
 const examplesNode = byId("example-list");
 const filter = byId("filter");
 let data, explorer, picker, activeId;
+let activeRegion = null;
+const regionRows = new Map();
 let cacheReady = false;
 let syncAvailable = false;
 let syncing = false;
@@ -52,14 +54,62 @@ function setSelected(id) {
   }
 }
 
+function selectRegion(name) {
+  activeRegion = name === activeRegion ? null : name;
+  explorer.selectRegion(activeRegion);
+  if (!activeRegion) explorer.reset();
+  renderExamples();
+}
+
+function setupRegions() {
+  const totals = new Map();
+  for (const item of data.examples) totals.set(item.region, (totals.get(item.region) ?? 0) + 1);
+  const names = data.regions.features.map(regionName)
+    .sort((a, b) => ((totals.get(b) ?? 0) - (totals.get(a) ?? 0)) || a.localeCompare(b));
+  for (const name of names) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "region-row";
+    const label = document.createElement("span");
+    label.textContent = name;
+    const bar = document.createElement("span");
+    bar.className = "region-bar";
+    bar.setAttribute("aria-hidden", "true");
+    const count = document.createElement("strong");
+    button.append(label, bar, count);
+    button.addEventListener("click", () => selectRegion(name));
+    byId("region-list").append(button);
+    regionRows.set(name, { button, bar, count });
+  }
+}
+
+function updateDashboard(examples) {
+  const counts = new Map();
+  for (const item of examples) counts.set(item.region, (counts.get(item.region) ?? 0) + 1);
+  const maximum = Math.max(1, ...counts.values());
+  byId("metric-total").textContent = examples.length;
+  byId("metric-regions").textContent = counts.size + " / " + regionRows.size;
+  byId("all-regions").disabled = !activeRegion;
+  byId("examples-title").textContent = activeRegion ? activeRegion + " examples" : "Mapped examples";
+  for (const [name, { button, bar, count }] of regionRows) {
+    const total = counts.get(name) ?? 0;
+    count.textContent = total;
+    bar.style.setProperty("--report-share", (total / maximum) * 100 + "%");
+    button.setAttribute("aria-pressed", String(name === activeRegion));
+    button.setAttribute("aria-label", name + ", " + total + (total === 1 ? " report" : " reports"));
+  }
+}
+
 function renderExamples() {
-  const subset = data.examples.filter(item => filter.value === "all" || item.category === filter.value);
+  const byType = data.examples.filter(item => filter.value === "all" || item.category === filter.value);
+  const subset = byType.filter(item => !activeRegion || item.region === activeRegion);
+  updateDashboard(byType);
   explorer.filter(subset.map(item => item.id));
   examplesNode.replaceChildren();
   if (!subset.length) {
     const empty = document.createElement("p");
     empty.className = "empty";
-    empty.textContent = "No examples for this observation type.";
+    empty.textContent = activeRegion ? "No matching examples in this region." : "No examples for this observation type.";
     examplesNode.append(empty);
   }
 
@@ -101,8 +151,9 @@ function renderExamples() {
 Promise.all(["neighbors.geojson", "regions.geojson", "rivers.geojson", "southern-rivers.geojson", "lakes.geojson", "labels.json", "examples.json"].map(loadJSON))
   .then(([neighbors, regions, rivers, southernRivers, lakes, labels, examples]) => {
     const mapData = { neighbors, regions, rivers, southernRivers, lakes, labels, examples };
-    explorer = buildExplorer(mapData, setSelected);
+    explorer = buildExplorer(mapData, setSelected, selectRegion);
     data = mapData;
+    setupRegions();
     filter.disabled = false;
     renderExamples();
   })
@@ -114,7 +165,12 @@ Promise.all(["neighbors.geojson", "regions.geojson", "rivers.geojson", "southern
   });
 
 filter.addEventListener("change", renderExamples);
-byId("reset-map").addEventListener("click", () => explorer?.reset());
+byId("all-regions").addEventListener("click", () => selectRegion(null));
+byId("reset-map").addEventListener("click", () => {
+  if (!explorer) return;
+  if (activeRegion) selectRegion(null);
+  else explorer.reset();
+});
 for (const button of document.querySelectorAll("[data-layer]")) {
   button.addEventListener("click", () => {
     if (!explorer) return;
@@ -154,7 +210,7 @@ byId("open-report").addEventListener("click", () => {
     byId("lng").value = lng.toFixed(6);
     setPin(Number(byId("lat").value), Number(byId("lng").value));
   });
-  picker.show();
+  picker.show(explorer.view());
 });
 
 for (const id of ["lat", "lng"]) {

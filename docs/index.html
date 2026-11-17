@@ -41,6 +41,7 @@
       <div class="map-card">
         <div class="map-top">
           <h2>Explore Ghana</h2>
+          <label class="basemap-control">Basemap<select id="main-basemap" aria-label="Map basemap"></select></label>
           <div class="layers" role="group" aria-label="Map layers">
             <button type="button" aria-pressed="true" data-layer="regions">Regions</button>
             <button type="button" aria-pressed="true" data-layer="water">Waterways</button>
@@ -59,16 +60,23 @@
           <span><i class="legend-line region-key"></i> Region boundary</span>
           <span><i class="legend-line"></i> River or lake</span>
           <span><i class="legend-dot"></i> Example observation</span>
+          <span class="map-tip">Scroll to zoom · Drag to pan</span>
         </div>
       </div>
       <aside class="reports" aria-labelledby="reports-title">
         <div class="report-head">
-          <p class="eyebrow sample-label"><span aria-hidden="true"></span> Fictional data</p>
-          <h2 id="reports-title">Example observations</h2>
-          <p>Select an example to see it on the map. These locations illustrate the workflow.</p>
-          <label class="sr-only" for="filter">Filter example observations</label>
+          <p class="eyebrow sample-label"><span aria-hidden="true"></span> Fictional pilot data</p>
+          <h2 id="reports-title">Reports by region</h2>
+          <label class="sr-only" for="filter">Filter by observation type</label>
           <select id="filter" disabled><option value="all">All observation types</option></select>
         </div>
+        <div class="metrics" aria-live="polite">
+          <div><strong id="metric-total">–</strong><span>Example reports</span></div>
+          <div><strong id="metric-regions">–</strong><span>Regions with reports</span></div>
+        </div>
+        <div class="region-header"><h3>Ghana’s 16 regions</h3><button id="all-regions" type="button" disabled>Clear region</button></div>
+        <div id="region-list" class="region-list" role="group" aria-label="Filter map by Ghana region"></div>
+        <div class="example-header"><h3 id="examples-title">Mapped examples</h3></div>
         <div id="example-list" class="example-list" aria-live="polite">
           <p class="empty">Loading example observations…</p>
         </div>
@@ -104,7 +112,8 @@
       </div>
       <fieldset>
         <legend>Example location</legend>
-        <p class="field-help">Place a pin within Ghana or enter latitude and longitude below.</p>
+        <p class="field-help">Scroll to zoom, then click to drop a pin. Drag the pin to adjust it or enter coordinates below.</p>
+        <label class="basemap-control">Basemap<select id="report-basemap" aria-label="Report basemap"></select></label>
         <div id="report-map" class="report-map" role="region" aria-label="Map for choosing a fictional report location"></div>
         <div class="form-row">
           <label>Latitude<input id="lat" name="lat" inputmode="decimal" type="number" step="any" min="4.5" max="11.3" required></label>

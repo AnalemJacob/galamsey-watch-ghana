@@ -155,3 +155,44 @@ fieldset {min-width:0;margin:10px 0;border:1px solid var(--line);border-radius:7
 @media(prefers-reduced-motion:reduce) {
   :root {scroll-behavior:auto}
 }
+
+/* The map and dashboard form a single work area. */
+.workspace {gap:14px;grid-template-columns:minmax(0,1fr) minmax(295px,348px);align-items:stretch}
+.map-card,.reports {box-shadow:0 8px 28px #243d2d0b;border-radius:14px}
+.map-card {display:flex;flex-direction:column}
+.map-wrap {display:flex;flex:1}
+.main-map {width:100%;height:auto;min-height:clamp(525px,65vh,690px)}
+.map-top {display:grid;grid-template-columns:auto 1fr auto;gap:14px;padding:12px 15px;background:#fafbf6}
+.map-top .basemap-control {justify-self:end}
+.basemap-control {display:flex;align-items:center;gap:7px;color:#485d51;font-size:12px;font-weight:650;white-space:nowrap}
+.basemap-control select {width:auto;margin:0;padding:6px 8px;border:1px solid #c7d2c6;border-radius:6px;background:#fffefa;color:var(--forest)}
+.map-tip {margin-inline-start:auto}
+.report-head {padding:16px 17px 12px;background:#f8faf4}
+.report-head select {margin-top:7px}
+.metrics {display:grid;grid-template-columns:1fr 1fr;margin:12px 15px 5px;gap:7px}
+.metrics div {display:grid;gap:3px;padding:10px 11px;border:1px solid #dbe3d8;border-radius:8px;background:#eff4eb}
+.metrics strong {font:750 26px/1 "Bricolage Grotesque",sans-serif;letter-spacing:-.045em}
+.metrics span {font-size:11px;color:#4b6254}
+.region-header,.example-header {display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 15px 7px}
+.region-header h3,.example-header h3 {font-size:15px}
+.region-header button {border:none;background:transparent;color:#315b45;font-size:12px;text-decoration:underline;text-underline-offset:3px;padding:4px}
+.region-list {display:grid;max-height:238px;overflow:auto;padding:1px 11px 4px;scrollbar-width:thin}
+.region-row {display:grid;grid-template-columns:minmax(92px,1fr) minmax(44px,.6fr) 20px;gap:9px;align-items:center;width:100%;border:0;background:transparent;color:var(--forest);text-align:left;font-size:12px;min-height:29px;padding:4px 5px;border-radius:5px}
+.region-row:hover,.region-row[aria-pressed=true] {background:#e8f0e5}
+.region-row strong {text-align:right;font-variant-numeric:tabular-nums}
+.region-bar {height:5px;border-radius:10px;background:linear-gradient(to right,#558368 var(--report-share),#e0e8de var(--report-share))}
+.example-header {border-top:1px solid var(--line);margin-top:5px}
+.example-list {min-height:69px;max-height:148px;overflow:auto;scrollbar-width:thin}
+.report-map {cursor:crosshair;height:260px}
+fieldset .basemap-control {justify-content:flex-end;margin-bottom:6px}
+@media(max-width:1040px) {
+  .map-top {grid-template-columns:1fr auto;row-gap:7px}
+  .map-top .layers {grid-column:1/-1}
+  .map-tip {margin-inline-start:0}
+}
+@media(max-width:720px) {
+  .workspace {grid-template-columns:1fr}
+  .main-map {min-height:430px}
+  .report-map {height:215px}
+  .map-top {padding:10px}
+}

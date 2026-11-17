@@ -43,3 +43,13 @@ https://content.globalforestwatch.org/wp-content/uploads/2020/09/GFW-User-Guide-
 Software and typography
 Leaflet 1.9.4, BSD 2-Clause, see ../vendor/LICENSE.
 Bricolage Grotesque and Instrument Sans, SIL Open Font License 1.1, see ../assets/.
+
+Online basemaps
+OpenStreetMap standard tiles: https://www.openstreetmap.org/copyright
+Tile usage: https://operations.osmfoundation.org/policies/tiles/
+OpenTopoMap: © OpenStreetMap contributors; elevation SRTM and Sonny;
+map style © OpenTopoMap (CC BY-SA), https://opentopomap.org/
+EOxCloudless by EOX IT Services GmbH (contains modified Copernicus Sentinel
+data 2024): https://cloudless.eox.at/license-non-commercial
+Satellite is a 2024 reference mosaic. Online tiles load on demand. The
+bundled offline map, example data, and form are available offline.
