@@ -196,3 +196,19 @@ fieldset .basemap-control {justify-content:flex-end;margin-bottom:6px}
   .report-map {height:215px}
   .map-top {padding:10px}
 }
+
+.volunteer {margin:64px 0}
+.volunteer > header {max-width:680px;margin-bottom:20px}
+.volunteer > header p {color:var(--muted)}
+.volunteer-workspace {display:grid;grid-template-columns:minmax(0,1fr) minmax(275px,330px);gap:16px;align-items:start}
+#volunteer-map {height:clamp(350px,58vh,690px);background:#253b31}
+#volunteer-map.is-drawing {cursor:crosshair}
+.volunteer-panel {display:grid;gap:12px;padding:20px;background:white;border:1px solid #c8d1c6;border-radius:12px}
+.volunteer-panel h3,.volunteer-panel p {margin:0}
+.volunteer-panel label {display:grid;gap:5px}
+.volunteer-panel input {width:100%}
+.volunteer-actions {display:flex;flex-wrap:wrap;gap:7px}
+.volunteer-actions button,#volunteer-reset,#volunteer-sign-out {border:1px solid #c8d1c6;border-radius:5px;background:white;color:#172d25;padding:6px 9px}
+.volunteer-note {font-size:13px;color:#415e50;padding:0 12px 6px}
+.volunteer-panel .volunteer-note {padding:0}
+@media (max-width:760px) {.volunteer-workspace {grid-template-columns:1fr}.volunteer {margin:40px 0}}

@@ -1,7 +1,7 @@
 const prefix = "galamsey-watch:" + self.registration.scope + ":";
-const cacheName = prefix + "v5";
+const cacheName = prefix + "v6";
 const files = [
-  "./index.html", "./style.css", "./app.js", "./model.js", "./maps.js", "./storage.js",
+  "./index.html", "./style.css", "./app.js", "./model.js", "./maps.js", "./storage.js", "./volunteer.js",
   "./manifest.webmanifest", "./assets/mark.svg", "./assets/bricolage.woff2", "./assets/instrument.woff2",
   "./vendor/leaflet.js", "./vendor/leaflet.css", "./vendor/images/marker-icon.png",
   "./vendor/images/marker-icon-2x.png", "./vendor/images/marker-shadow.png",

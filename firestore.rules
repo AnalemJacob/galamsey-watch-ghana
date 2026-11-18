@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /volunteerSubmissions/{submissionId} {
+      allow create: if request.auth != null
+        && request.auth.token.firebase.sign_in_provider == "google.com"
+        && request.resource.data.keys().hasAll(['owner', 'community', 'imagery', 'geometry', 'status', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['owner', 'community', 'imagery', 'geometry', 'status', 'createdAt'])
+        && request.resource.data.owner == request.auth.uid
+        && request.resource.data.community is string
+        && request.resource.data.community.size() > 0
+        && request.resource.data.community.size() <= 100
+        && request.resource.data.imagery in ['sentinel', 'mapbox']
+        && request.resource.data.geometry is string
+        && request.resource.data.geometry.size() > 40
+        && request.resource.data.geometry.size() <= 16000
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time;
+    }
+  }
+}
