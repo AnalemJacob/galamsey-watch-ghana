@@ -51,3 +51,36 @@ fictional observations only and the server listens on loopback for that trial.
 - `docs/vendor/` and `docs/assets/` contain the locally bundled map library and fonts.
 
 For source and dataset attribution, see [SOURCES.txt](docs/data/SOURCES.txt).
+
+## Volunteer mapping
+
+The website includes a separate imagery map for tracing candidate mining pits.
+Scroll and pan to a community, draw an outline, and download it as a GeoJSON
+polygon. This works without Google sign-in or data storage. Candidate
+submissions are private and pending review. Confirm the geometry and imagery
+before drawing conclusions about a site. The fictional report dashboard uses
+its existing example data.
+
+To activate online sign-in and submissions:
+
+1. Create a Firebase project, register a web app, and enable the Google sign-in
+   provider. Add `analemjacob.github.io` to Authentication → Settings →
+   Authorized domains.
+2. Create a Cloud Firestore database and deploy the supplied rules from this
+   repository with `firebase deploy --only firestore:rules --project YOUR_PROJECT_ID`.
+   These rules allow Google-authenticated contributors to create pending
+   submissions. The project operator reviews them in the Firebase console.
+   The client accepts only bounded-length candidate payloads and the operator
+   should validate submitted geometry before use.
+3. Put the Firebase **web app client configuration** in the `firebase` field
+   in `docs/volunteer-config.json` and publish the file with the website.
+   Use the SDK config object, with JSON-quoted keys. Keep service-account
+   credentials out of the website and repository.
+
+The default imagery is EOX Sentinel-2 cloudless (2024). To enable the more
+detailed Mapbox Satellite layer for this non-commercial pilot, add a
+URL-restricted **public** Mapbox token to `mapboxPublicToken` and set
+`enableNoncommercialMapboxTracing` to `true` in the same configuration.
+Check source detail on the target communities before tracing. Coverage,
+resolution and imagery dates vary. See the
+[Mapbox imagery terms and tracing guidance](https://www.mapbox.com/imagery).

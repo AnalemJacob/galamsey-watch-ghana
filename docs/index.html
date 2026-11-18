@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="./style.css">
   <script defer src="./vendor/leaflet.js"></script>
   <script type="module" src="./app.js"></script>
+  <script type="module" src="./volunteer.js"></script>
 </head>
 <body>
   <a href="#main" class="skip">Skip to content</a>
@@ -23,6 +24,7 @@
       </a>
       <nav aria-label="Main navigation">
         <a class="current" href="#explore">Explore map</a>
+        <a href="#volunteer">Volunteer mapping</a>
         <a href="#about">About</a>
         <button class="nav-button" id="open-outbox" type="button">Outbox <span id="outbox-count">0</span></button>
       </nav>
@@ -81,6 +83,39 @@
           <p class="empty">Loading example observations…</p>
         </div>
       </aside>
+    </section>
+    <section id="volunteer" class="volunteer" aria-labelledby="volunteer-title">
+      <header>
+        <h2 id="volunteer-title">Map possible mining pits</h2>
+        <p>Zoom into your community and trace ground disturbance visible in the imagery. Submit candidates for review. Imagery alone cannot establish whether mining is illegal.</p>
+      </header>
+      <div class="volunteer-workspace">
+        <div class="map-card">
+          <div class="map-top">
+            <label class="basemap-control">Imagery <select id="volunteer-imagery"></select></label>
+            <button id="volunteer-reset" type="button">Reset to Ghana</button>
+          </div>
+          <div id="volunteer-map" role="region" aria-label="Satellite map for tracing candidate mining pits"></div>
+          <div class="map-footer">Scroll to zoom · Drag to pan · Click the map to place each corner while drawing</div>
+          <p id="volunteer-imagery-note" class="volunteer-note" role="status"></p>
+        </div>
+        <div class="volunteer-panel">
+          <h3>Trace and submit</h3>
+          <p id="volunteer-account" role="status">Checking Google sign-in…</p>
+          <button id="volunteer-sign-in" type="button" class="primary" disabled>Sign in with Google</button>
+          <button id="volunteer-sign-out" type="button" hidden>Sign out</button>
+          <label>Community name <input id="volunteer-community" maxlength="100" autocomplete="off" placeholder="Enter a nearby community"></label>
+          <div class="volunteer-actions">
+            <button id="volunteer-start" type="button">Draw polygon</button>
+            <button id="volunteer-undo" type="button" disabled>Undo point</button>
+            <button id="volunteer-finish" type="button" disabled>Finish outline</button>
+            <button id="volunteer-clear" type="button" disabled>Clear</button>
+            <button id="volunteer-download" type="button" disabled>Download GeoJSON</button>
+          </div>
+          <button id="volunteer-submit" type="button" class="primary" disabled>Submit for review</button>
+          <p id="volunteer-status" class="volunteer-note" role="status">Zoom to your community first. You can try drawing and download your outline before signing in.</p>
+        </div>
+      </div>
     </section>
     <section class="about" id="about" aria-labelledby="about-title">
       <div>
