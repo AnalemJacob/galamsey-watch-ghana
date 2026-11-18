@@ -1,4 +1,5 @@
 import { fitGhana } from "./maps.js";
+import { scenes } from "./volunteer-imagery.js";
 
 const L = window.L;
 if (L) setupVolunteerMap();
@@ -6,7 +7,6 @@ if (L) setupVolunteerMap();
 function setupVolunteerMap() {
   const el = id => document.getElementById("volunteer-" + id);
   const map = L.map(el("map"), { maxZoom: 20, doubleClickZoom: false });
-  fitGhana(map);
   L.control.scale({ imperial: false }).addTo(map);
   const layers = {
     sentinel: {
@@ -14,9 +14,24 @@ function setupVolunteerMap() {
       url: "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg",
       attribution: '<a href="https://cloudless.eox.at/">EOX</a> · Modified Copernicus Sentinel data 2024',
       zoom: 14,
-      note: "Sentinel-2 overview. Zooming past the source detail enlarges pixels. Draw only where the boundary is visible."
+      note: "Sentinel-2 · 2024 · 10 m imagery. Choose a local scene for sharper detail."
     }
   };
+  for (const scene of scenes) {
+    const credit = `<a href="https://api.openaerialmap.org/meta/${scene.id}">${scene.provider} / OpenAerialMap</a>`;
+    const licenseName = "CC " + scene.license.toUpperCase() + " 4.0";
+    const license = `<a href="https://creativecommons.org/licenses/${scene.license}/4.0/">${licenseName}</a>`;
+    layers[scene.id] = {
+      ...scene,
+      label: `${scene.name} · ${scene.cm} cm`,
+      zoom: scene.nativeZoom,
+      attribution: credit + " · " + license,
+      note: `${scene.source} imagery · ${scene.date} · ${scene.cm} cm source pixels. Sentinel-2 provides context outside the scene.`
+    };
+  }
+  const overview = L.tileLayer(layers.sentinel.url, {
+    attribution: layers.sentinel.attribution, maxNativeZoom: layers.sentinel.zoom, maxZoom: 20, zIndex: 1
+  }).addTo(map);
   let tiles;
   let imagery;
   let vertices = [];
@@ -31,12 +46,22 @@ function setupVolunteerMap() {
     const source = layers[key];
     if (tiles) tiles.remove();
     imagery = key;
-    tiles = L.tileLayer(source.url, { attribution: source.attribution, maxNativeZoom: source.zoom, maxZoom: 20 });
+    el("imagery").value = key;
+    el("imagery-note").textContent = source.note;
+    if (source.bounds) {
+      map.fitBounds(source.bounds, { padding: [24, 24], maxZoom: 17, animate: false });
+    }
+    if (key === "mapbox") overview.remove();
+    else if (!map.hasLayer(overview)) overview.addTo(map);
+    if (key === "sentinel") return;
+    tiles = L.tileLayer(source.url, {
+      attribution: source.attribution, bounds: source.bounds, maxNativeZoom: source.zoom,
+      maxZoom: 20, noWrap: Boolean(source.bounds), zIndex: 2
+    });
     tiles.on("tileerror", () => {
-      if (imagery === key) el("imagery-note").textContent = "Some imagery tiles did not load. Try another layer or check your connection.";
+      if (imagery === key) el("imagery-note").textContent = source.note + " Some imagery tiles did not load.";
     });
     tiles.addTo(map);
-    el("imagery-note").textContent = source.note;
   }
 
   function addChoice(key) {
@@ -62,11 +87,16 @@ function setupVolunteerMap() {
   function feature(community) {
     const ring = vertices.map(({lng, lat}) => [lng, lat]);
     return { type: "Feature", geometry: { type: "Polygon", coordinates: [[...ring, ring[0]]] },
-      properties: { community, observation: "possible mining-related disturbance", imagery } };
+      properties: { community, observation: "possible mining-related disturbance", imagery,
+        ...(layers[imagery].date && { imageryDate: layers[imagery].date }) } };
   }
 
   addChoice("sentinel");
-  selectImagery("sentinel");
+  const localOptions = document.createElement("optgroup");
+  localOptions.label = "High-resolution scenes";
+  for (const scene of scenes) localOptions.append(new Option(layers[scene.id].label, scene.id));
+  el("imagery").append(localOptions);
+  selectImagery(scenes[0].id);
   update();
   el("imagery").onchange = event => {
     if (drawing || complete) {
@@ -76,7 +106,10 @@ function setupVolunteerMap() {
     }
     selectImagery(event.target.value);
   };
-  el("reset").onclick = () => fitGhana(map);
+  el("reset").onclick = () => {
+    if (!drawing && !complete) selectImagery("sentinel");
+    fitGhana(map);
+  };
   el("start").onclick = () => {
     drawing = true;
     el("status").textContent = "Click each corner in order. Choose Finish outline when you have traced the boundary.";
@@ -86,6 +119,11 @@ function setupVolunteerMap() {
     if (!drawing) return;
     if (map.getZoom() < 14) {
       el("status").textContent = "Zoom in farther before tracing the outline.";
+      return;
+    }
+    const sceneBounds = layers[imagery].bounds;
+    if (sceneBounds && !L.latLngBounds(sceneBounds).contains(latlng)) {
+      el("status").textContent = "This point is outside the selected scene. Trace inside the scene or switch to the Ghana overview.";
       return;
     }
     if (vertices.length >= 200) {
@@ -154,12 +192,6 @@ function setupVolunteerMap() {
         note: "Imagery resolution and capture dates vary by location. Use this layer for non-commercial tracing."
       };
       addChoice("mapbox");
-      if (!drawing && !complete) {
-        el("imagery").value = "mapbox";
-        selectImagery("mapbox");
-      }
-    } else if (imagery === "sentinel") {
-      el("imagery-note").textContent += " Higher-resolution Mapbox imagery is awaiting activation.";
     }
     if (!config.firebase) {
       el("account").textContent = "Google sign-in is awaiting setup. You can still draw and download an outline.";

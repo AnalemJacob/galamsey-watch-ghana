@@ -1,7 +1,8 @@
 const prefix = "galamsey-watch:" + self.registration.scope + ":";
-const cacheName = prefix + "v6";
+const cacheName = prefix + "v7";
 const files = [
-  "./index.html", "./style.css", "./app.js", "./model.js", "./maps.js", "./storage.js", "./volunteer.js",
+  "./index.html", "./style.css?v=7", "./app.js", "./model.js", "./maps.js", "./storage.js",
+  "./volunteer.js?v=7", "./volunteer-imagery.js",
   "./manifest.webmanifest", "./assets/mark.svg", "./assets/bricolage.woff2", "./assets/instrument.woff2",
   "./vendor/leaflet.js", "./vendor/leaflet.css", "./vendor/images/marker-icon.png",
   "./vendor/images/marker-icon-2x.png", "./vendor/images/marker-shadow.png",
@@ -24,8 +25,14 @@ self.addEventListener("fetch", event => {
   if (request.method !== "GET" || !request.url.startsWith(self.registration.scope) ||
       new URL(request.url).pathname.startsWith(new URL("api/", self.registration.scope).pathname)) return;
   event.respondWith(caches.open(cacheName).then(async cache => {
-    const cacheKey = request.mode === "navigate" ? new URL("index.html", self.registration.scope) : request;
-    const saved = await cache.match(cacheKey);
+    if (request.mode === "navigate") {
+      try {
+        return await fetch(request, { cache: "no-cache" });
+      } catch {
+        return (await cache.match(new URL("index.html", self.registration.scope))) || Response.error();
+      }
+    }
+    const saved = await cache.match(request);
     return saved || fetch(request);
   }));
 });

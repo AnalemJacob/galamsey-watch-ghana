@@ -9,10 +9,10 @@
   <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./vendor/leaflet.css">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./style.css?v=7">
   <script defer src="./vendor/leaflet.js"></script>
   <script type="module" src="./app.js"></script>
-  <script type="module" src="./volunteer.js"></script>
+  <script type="module" src="./volunteer.js?v=7"></script>
 </head>
 <body>
   <a href="#main" class="skip">Skip to content</a>
@@ -37,7 +37,10 @@
         <h1 id="title">Galamsey Watch Ghana</h1>
         <p class="lead">Explore how communities could document changes to rivers, forests, and land that may be linked to galamsey, Ghana’s illegal small-scale mining.</p>
       </div>
-      <button type="button" id="open-report" class="primary"><span aria-hidden="true">＋</span> Try a report</button>
+      <div class="intro-actions">
+        <a class="primary" href="#volunteer">Map a possible pit</a>
+        <button type="button" id="open-report" class="secondary"><span aria-hidden="true">＋</span> Try a report</button>
+      </div>
     </section>
     <section class="workspace" id="explore" aria-label="Explore the Ghana map">
       <div class="map-card">
@@ -91,11 +94,11 @@
       </header>
       <div class="volunteer-workspace">
         <div class="map-card">
-          <div class="map-top">
+          <div class="map-top volunteer-map-toolbar">
             <label class="basemap-control">Imagery <select id="volunteer-imagery"></select></label>
             <button id="volunteer-reset" type="button">Reset to Ghana</button>
           </div>
-          <div id="volunteer-map" role="region" aria-label="Satellite map for tracing candidate mining pits"></div>
+          <div id="volunteer-map" role="region" aria-label="Imagery map for tracing candidate mining pits"></div>
           <div class="map-footer">Scroll to zoom · Drag to pan · Click the map to place each corner while drawing</div>
           <p id="volunteer-imagery-note" class="volunteer-note" role="status"></p>
         </div>
