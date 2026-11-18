@@ -77,8 +77,16 @@ To activate online sign-in and submissions:
    Use the SDK config object, with JSON-quoted keys. Keep service-account
    credentials out of the website and repository.
 
-The default imagery is EOX Sentinel-2 cloudless (2024). To enable the more
-detailed Mapbox Satellite layer for this non-commercial pilot, add a
+The volunteer map opens on the Esuajah North drone scene. Choose **Imagery**
+to jump to a local scene, including satellite imagery near Bogoso and drone
+imagery over Asuopri, Essam–Debiso, and other communities. The map gives the
+capture date, source resolution, credit, and license for each scene.
+Coverage is local and some scenes are historical. The Bogoso scene is
+licensed for non-commercial use. **Reset to Ghana** brings back the national
+EOX Sentinel-2 cloudless (2024) view. See the
+[OpenAerialMap catalog](https://map.openaerialmap.org/) for additional scenes.
+
+To enable the optional Mapbox Satellite layer for this non-commercial pilot, add a
 URL-restricted **public** Mapbox token to `mapboxPublicToken` and set
 `enableNoncommercialMapboxTracing` to `true` in the same configuration.
 Check source detail on the target communities before tracing. Coverage,
